@@ -1,23 +1,29 @@
-set(PICORUBY_DIR "${COMPONENT_DIR}/picoruby")
-set(LIB_PICORUBY_FILE "${COMPONENT_DIR}/picoruby/build/esp32/lib/libmruby.a")
-set(CONFIG ${COMPONENT_DIR}/esp32_build_config.rb)
-
 idf_component_register(
-  INCLUDE_DIRS picoruby/include
+  SRCS
+    "picoruby/mrbgems/picoruby-machine/ports/esp32/machine.c"
+  INCLUDE_DIRS "."
 )
 
+set(PICORUBY_DIR "${COMPONENT_DIR}/picoruby")
+set(LIBMRUBY_FILE "${PICORUBY_DIR}/build/esp32/lib/libmruby.a")
+
 add_custom_command(
-  OUTPUT ${LIB_PICORUBY_FILE}
-  COMMAND ${CMAKE_COMMAND} -E env "MRUBY_CONFIG=${CONFIG}" rake
-  WORKING_DIRECTORY ${PICORUBY_DIR}
-  BYPRODUCTS ${COMPONENT_DIR}/esp32_build_config.rb.lock
-  VERBATIM
+    OUTPUT ${LIBMRUBY_FILE}
+    COMMAND ${CMAKE_COMMAND} -E echo "MRUBY_CONFIG=${IDF_TARGET_ARCH}-esp rake"
+    COMMAND ${CMAKE_COMMAND} -E env MRUBY_CONFIG=${IDF_TARGET_ARCH}-esp rake
+    WORKING_DIRECTORY ${PICORUBY_DIR}
+    COMMENT "PicoRuby build"
+    VERBATIM
 )
 
 add_prebuilt_library(
-  libpicoruby ${LIB_PICORUBY_FILE}
+  libmruby ${LIBMRUBY_FILE}
+  REQUIRES picoruby-esp32
 )
-target_link_libraries(${COMPONENT_LIB} INTERFACE libpicoruby)
+target_link_libraries(${COMPONENT_LIB} PRIVATE libmruby)
 
-add_custom_target(picoruby DEPENDS ${LIB_PICORUBY_FILE})
+add_custom_target(
+  picoruby DEPENDS ${LIBMRUBY_FILE}
+  DEPENDS ${LIBMRUBY_FILE}
+)
 add_dependencies(${COMPONENT_LIB} picoruby)
