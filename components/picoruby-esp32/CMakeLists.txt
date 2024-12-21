@@ -1,11 +1,12 @@
 idf_component_register(
   SRCS
-    "picoruby/mrbgems/picoruby-machine/ports/esp32/machine.c"
+    picoruby/mrbgems/picoruby-machine/ports/esp32/machine.c
   INCLUDE_DIRS "."
+  REQUIRES esp_driver_uart
 )
 
-set(PICORUBY_DIR "${COMPONENT_DIR}/picoruby")
-set(LIBMRUBY_FILE "${PICORUBY_DIR}/build/esp32/lib/libmruby.a")
+set(PICORUBY_DIR ${COMPONENT_DIR}/picoruby)
+set(LIBMRUBY_FILE ${PICORUBY_DIR}/build/esp32/lib/libmruby.a)
 
 add_custom_command(
     OUTPUT ${LIBMRUBY_FILE}
