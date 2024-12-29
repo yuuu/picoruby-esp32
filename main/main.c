@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <inttypes.h>
+#include <picogem_init.c>
 #include "sdkconfig.h"
 
 #include <mrubyc.h>
@@ -20,6 +21,10 @@ static uint8_t heap_pool[HEAP_SIZE];
 void app_main(void)
 {
   mrbc_init(heap_pool, HEAP_SIZE);
-  mrbc_create_task(main_task, 0);
+
+  mrbc_tcb *tcb = mrbc_create_task(main_task, 0);
+  mrbc_vm *vm = &tcb->vm;
+
+  picoruby_init_require(vm);
   mrbc_run();
 }
