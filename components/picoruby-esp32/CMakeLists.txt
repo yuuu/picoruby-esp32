@@ -1,8 +1,20 @@
 idf_component_register(
   SRCS
-    picoruby/mrbgems/picoruby-machine/ports/esp32/machine.c
-  INCLUDE_DIRS "."
+    ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-machine/ports/esp32/machine.c
+    ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-io-console/ports/esp32/io-console.c
+    ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-filesystem-fat/ports/esp32/flash_disk.c
+    ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-env/ports/esp32/env.c
+  INCLUDE_DIRS
+    "."
+    ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-mrubyc/lib/mrubyc/src
+    ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-machine/include
+    ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-filesystem-fat/ports/esp32
   REQUIRES esp_driver_uart
+)
+
+add_definitions(
+  -DMRBC_USE_FLOAT=2
+  -DNDEBUG
 )
 
 set(PICORUBY_DIR ${COMPONENT_DIR}/picoruby)
