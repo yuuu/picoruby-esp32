@@ -2,3 +2,6 @@ build/
 sdkconfig
 sdkconfig.old
 .vscode
+
+components/picoruby-esp32/dist
+components/picoruby-esp32/.env
