@@ -1,9 +1,9 @@
 #include <inttypes.h>
-#include <picogem_init.c>
-#include <executables_init.c>
+#include "picoruby/build/esp32/mrbgems/picogem_init.c"
+#include "picoruby/build/esp32/mrbgems/executables_init.c"
 
 #include <mrubyc.h>
-#include "../../build/mrb/main_task.c"
+#include "mrb/main_task.c"
 
 #ifndef HEAP_SIZE
 #define HEAP_SIZE (1024 * 192)

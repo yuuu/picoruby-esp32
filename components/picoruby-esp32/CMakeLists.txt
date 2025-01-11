@@ -10,7 +10,6 @@ idf_component_register(
     ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-mrubyc/lib/mrubyc/src
     ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-machine/include
     ${COMPONENT_DIR}/picoruby/mrbgems/picoruby-filesystem-fat/ports/esp32
-    ${COMPONENT_DIR}/picoruby/build/esp32/mrbgems
   REQUIRES esp_driver_uart
 )
 
@@ -28,17 +27,17 @@ set(LIBMRUBY_FILE ${PICORUBY_DIR}/build/esp32/lib/libmruby.a)
 
 # Build PicoRuby
 add_custom_command(
-    OUTPUT ${LIBMRUBY_FILE}
-    COMMAND ${CMAKE_COMMAND} -E echo "MRUBY_CONFIG=${IDF_TARGET_ARCH}-esp rake"
-    COMMAND ${CMAKE_COMMAND} -E env MRUBY_CONFIG=${IDF_TARGET_ARCH}-esp rake
-    WORKING_DIRECTORY ${PICORUBY_DIR}
-    COMMENT "PicoRuby build"
-    VERBATIM
+  OUTPUT ${LIBMRUBY_FILE}
+  COMMAND ${CMAKE_COMMAND} -E echo "MRUBY_CONFIG=${IDF_TARGET_ARCH}-esp rake"
+  COMMAND ${CMAKE_COMMAND} -E env MRUBY_CONFIG=${IDF_TARGET_ARCH}-esp rake
+  WORKING_DIRECTORY ${PICORUBY_DIR}
+  COMMENT "PicoRuby build"
+  VERBATIM
 )
 
 add_prebuilt_library(
   libmruby ${LIBMRUBY_FILE}
-  REQUIRES picoruby-esp32
+  REQUIRES ${COMPONENT_NAME}
 )
 target_link_libraries(${COMPONENT_LIB} PRIVATE libmruby)
 
@@ -51,7 +50,7 @@ add_dependencies(${COMPONENT_LIB} picoruby)
 # Compile Ruby files
 add_custom_target(
   mrbdir ALL
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/build/mrb
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${COMPONENT_DIR}/mrb
 )
 add_dependencies(${COMPONENT_LIB} mrbdir)
 
@@ -60,7 +59,7 @@ set(PICORBC ${COMPONENT_DIR}/picoruby/bin/picorbc)
 
 foreach(rb ${RUBY_FILES})
 add_custom_target(${rb}
-  COMMAND ${PICORBC} -B${rb} -o${CMAKE_SOURCE_DIR}/build/mrb/${rb}.c ${COMPONENT_DIR}/mrblib/${rb}.rb
+  COMMAND ${PICORBC} -B${rb} -o${COMPONENT_DIR}/mrb/${rb}.c ${COMPONENT_DIR}/mrblib/${rb}.rb
   DEPENDS mrbdir
 )
 endforeach(rb)
