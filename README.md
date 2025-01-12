@@ -52,6 +52,7 @@ Build the project using the `idf.py` command.
 
 ```sh
 $ . $(YOUR_ESP_IDF_PATH)/export.sh
+$ idf.py set-target $(YOUR_ESP_TARGET) # example: idf.py set-target esp32c3
 $ idf.py build
 ```
 
@@ -75,7 +76,8 @@ Currently, this project is tested in the following environment only:
 - **Build OS**:
   - macOS
 - **Device**:
-  - M5Stamp C3 Mate
+  - ESP32-DevKitC(esp32)
+  - M5Stamp C3 Mate(esp32c3)
 
 ## License
 
