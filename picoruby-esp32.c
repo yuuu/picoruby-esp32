@@ -1,4 +1,6 @@
 #include <inttypes.h>
+#include "esp_task_wdt.h"
+
 #include "picoruby/build/esp32/mrbgems/picogem_init.c"
 #include "picoruby/build/esp32/mrbgems/executables_init.c"
 
@@ -13,6 +15,9 @@ static uint8_t heap_pool[HEAP_SIZE];
 
 void picoruby_esp32(void)
 {
+  // disable TWDT
+  esp_task_wdt_deinit();
+
   mrbc_init(heap_pool, HEAP_SIZE);
 
   mrbc_tcb *tcb = mrbc_create_task(main_task, 0);
