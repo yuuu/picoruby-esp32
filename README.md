@@ -1,6 +1,6 @@
 # PicoRuby on ESP32
 
-This is a component that can be used with ESP-IDF, allowing you to add PicoRuby to your project.
+This is a component that can be used with ESP-IDF, allowing you to add [PicoRuby](https://github.com/picoruby/picoruby) to your project.
 
 ## Getting Started
 
